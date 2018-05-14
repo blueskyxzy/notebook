@@ -1,0 +1,40 @@
+java8代码总结：
+
+
+1 List中取id的list
+List<Long> stationOrderIds = stationOrderList.stream().map(StationOrder::getId).distinct().collect(Collectors.toList());
+
+2 List<T>转Map<S,List<T>>  list按照id分组 ，
+Map<String, List<Entity>> demoMap = demoList.stream().collect(Collectors.groupingBy(Entity::getkey));
+//List 以ID分组 Map<Integer,List<Apple>>  
+Map<Integer, List<Apple>> groupBy = appleList.stream().collect(Collectors.groupingBy(Apple::getId));  
+
+3 Map<S,List<T>>转List<T>
+List<Entity> demoList = refDataMap.entrySet().stream().flatMap(map -> map.getValue().stream())  
+.collect(Collectors.toList());
+
+4 List<T>转Map<S,T>  id为key，对象为value
+Map<String,Entity> map = stats.stream().collect(Collectors.toMap(Entity::getKey, c -> c));  
+Map<Long, Long> floorStationIdMap = stations.stream().collect(Collectors.toMap(Station::getId , Station::getFloorId));
+Map<String,String> map = stats.stream().collect(Collectors.toMap(Entity::getKey, Entity::getStringValue));
+需要注意的是： 
+ toMap 如果集合对象有重复的key，会报错Duplicate key .... 
+apple1,apple12的id都为1。 
+可以用 (k1,k2)->k1 来设置，如果有重复的key,则保留key1,舍弃key2 
+Map<Integer, Apple> appleMap = appleList.stream().collect(Collectors.toMap(Apple::getId, a -> a,(k1,k2)->k1)); 
+
+5 过滤出符合条件的数据   list过滤
+List<Apple> filterList = appleList.stream().filter(a -> a.getName().equals("香蕉")).collect(Collectors.toList()); 
+
+6 将集合中的数据按照某个属性求和  求和
+//计算 总金额  
+BigDecimal totalMoney = appleList.stream().map(Apple::getMoney).reduce(BigDecimal.ZERO, BigDecimal::add); 
+
+7 查找流中最大 最小值
+Collectors.maxBy 和 Collectors.minBy 来计算流中的最大或最小值
+Optional<Dish> maxDish = Dish.menu.stream(). collect(Collectors.maxBy(Comparator.comparing(Dish::getCalories)));
+Optional<Dish> minDish = Dish.menu.stream().collect(Collectors.minBy(Comparator.comparing(Dish::getCalories)));
+
+8 去重
+// 根据id去重  
+ List<Person> unique = appleList.stream().collect( collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Apple::getId))), ArrayList::new) );  
