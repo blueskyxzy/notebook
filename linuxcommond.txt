@@ -1,0 +1,108 @@
+linux常用命令：
+    tail -f
+
+    less  Shift + G   q
+
+    grep
+
+    vi vim     esc    i   :wq    :q
+
+    cp
+
+    rm
+
+    mkdir
+
+    cd
+
+    unzip    zip
+
+    rz  (需要安装)
+
+    ping
+
+其他易忘：
+
+    查找关键日志记录 grep
+    grep [选项]...模式 [文件]...    （模式是正则表达式）
+    grep 'INFO' demo.log     #在文件demo.log中查找所有包行INFO的行
+    grep -c 'ERROR' demo.log   #输出文件demo.log中查找所有包行ERROR的行的数量
+    grep -v 'ERROR' demo.log   #查找不含"ERROR"的行
+
+    tar zxvf /tmp/jdk-8u171-linux-x64.tar.gz  （解压）
+
+    scp -P 22 /Users/xzy/Desktop/jdk-8u172-linux-x64.tar.gz root@47.74.148.87:/tmp/jdk-8u172-linux-x64.tar.gz（centos自带文件上传）
+
+    source  （执行文件中的命令）
+
+    find / -name libjli.so
+    find / -name mysqldump*
+
+    cd ~/.m2
+
+    service iptables save
+    service iptables restart    服务重启
+    service mysql start         服务启动
+    service mysql stop          服务关闭
+
+    ps -ef |grep tomcat   (查看进程)
+
+    kill -9 6632   (杀死进程)
+
+    netstat -alnp | grep 8080 （查看8080是否占用）
+
+    uniq -c demo.log  #标记该行重复的数量，不重复值为1
+
+特定的：
+    Java -version
+
+    ssh root@120.26.10.8
+
+    mysql -u alibeehive -h rm-bp19gzo9021hrm025o.mysql.rds.aliyuncs.com -p
+
+    jar -cvf gwgx-web-1.0-SNAPSHOT.war ./   打成war包
+
+    java -jar
+时间：
+    CST：          中国标准时间（China Standard Time)
+
+    hwclock -s     系统间同步至硬件
+    date        显示系统时间
+    hwclock     系统硬件时间
+    date -s     //设置当前时间，只有root权限才能设置，其他只能查看。
+    date -s 06/18/17 命令将日期设置为2017年6月18日但是系统时间是00:00:00
+    date -s 14:20:50   将时间设置为14点20分50秒
+    date -s "12:12:23 2017-12-21" //这样可以设置全部时间
+
+    ntpdate time.nuri.net 将系统时间同步到网络时间
+
+
+
+    ntpdate time.nist.gov 将系统时间同步到网络时间
+    hwclock -w     硬件间同步至系统
+    date 0618141614.30  将时间设置为2014年6月18日14点16分30秒（MMDDhhmmYYYY.ss）
+    date -s 20061010 //设置成20061010，这样会把具体时间设置成空00:00:00
+    1. 输入ntpdate time.nist.gov同步网络时间
+    结果：3 Jun 15:42:39 ntpdate[4721]: adjust time server 211.115.194.21 offset -0.005885 sec
+
+    出现上述结果代表时间同步成功，上面的大致意思为调整时间为服务器211.115.194.21的时间，相差-0.005885秒的时间
+
+    如果上面time.nist.gov服务器同步不了，可以换下面几个时间服务器试试：
+    time.nist.gov
+    time.nuri.net
+    0.asia.pool.ntp.org
+    1.asia.pool.ntp.org
+    2.asia.pool.ntp.org
+    3.asia.pool.ntp.org
+
+springboot部署脚本
+    ps -ef | grep org.springframework.boot.loader.JarLauncher | grep appname=admin | grep -v grep | cut -c 9-15 | xargs kill -s 9
+    rm /usr/local/sw/app/sw-admin/admin.jar
+    cp sw-admin-1.0-SNAPSHOT.jar -i /usr/local/sw/app/sw-admin/admin.jar
+    cd /usr/local/sw/app/sw-admin
+    rm -rf org
+    rm -rf BOOT-INF
+    rm -rf META-INF
+    unzip admin.jar
+    nohup java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Dappname=admin org.springframework.boot.loader.JarLauncher >consoleMsg.log 2>&1 &
+
