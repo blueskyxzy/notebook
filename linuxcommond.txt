@@ -76,8 +76,6 @@ linux常用命令：
 
     ntpdate time.nuri.net 将系统时间同步到网络时间
 
-
-
     ntpdate time.nist.gov 将系统时间同步到网络时间
     hwclock -w     硬件间同步至系统
     date 0618141614.30  将时间设置为2014年6月18日14点16分30秒（MMDDhhmmYYYY.ss）
