@@ -56,11 +56,11 @@ linux常用命令：
 特定的：
     Java -version
 
-    ssh root@120.26.10.8
+    ssh root@IP地址
 
-    mysql -u alibeehive -h rm-bp19gzo9021hrm025o.mysql.rds.aliyuncs.com -p
+    mysql -u 用户名 -p
 
-    jar -cvf gwgx-web-1.0-SNAPSHOT.war ./   打成war包
+    jar -cvf 包名-1.0-SNAPSHOT.war ./   打成war包
 
     java -jar
 时间：
@@ -98,11 +98,11 @@ linux常用命令：
 springboot部署脚本
     ps -ef | grep org.springframework.boot.loader.JarLauncher | grep appname=admin | grep -v grep | cut -c 9-15 | xargs kill -s 9
     rm /usr/local/sw/app/sw-admin/admin.jar
-    cp sw-admin-1.0-SNAPSHOT.jar -i /usr/local/sw/app/sw-admin/admin.jar
-    cd /usr/local/sw/app/sw-admin
+    cp （项目名)-1.0-SNAPSHOT.jar -i /usr/local/sw/app/（项目名)/admin.jar
+    cd /usr/local/sw/app/（项目名)
     rm -rf org
     rm -rf BOOT-INF
     rm -rf META-INF
-    unzip admin.jar
+    unzip （jar名).jar
     nohup java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Dappname=admin org.springframework.boot.loader.JarLauncher >consoleMsg.log 2>&1 &
 
