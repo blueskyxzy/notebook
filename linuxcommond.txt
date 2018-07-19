@@ -21,6 +21,8 @@ linux常用命令：
 
     ping
 
+    cat /proc/version或者uname -a   查看系统版本
+
 其他易忘：
 
     查找关键日志记录 grep
