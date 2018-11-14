@@ -1,0 +1,63 @@
+HashMap
+总结：
+1.结构是数组+单链表，又称为哈希堆
+2.根据hash值来确定索引，hash通过低16位异或保留原高16位和低16位的特性，并让hash更加不确定 来降低碰撞的概率,再通过低位位与来完成取余
+3.默认数组大小和扩容
+4.hash相同，key不同时，增加链表长度。当链表长度达到8，会转化成红黑树，以提升它的查询、插入效率
+
+目的：存键值对
+
+用什么数据结构存数据？ 数组+单向链表
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    static final int TREEIFY_THRESHOLD = 8;
+    static final int UNTREEIFY_THRESHOLD = 6;
+    static final int MIN_TREEIFY_CAPACITY = 64;
+    transient int size;
+    transient int modCount;
+    int threshold;
+    final float loadFactor;
+    transient Node<K,V>[] table; 单向链表数组存
+    transient Set<Entry<K,V>> entrySet; 存entrySet
+    static class Node<K,V> implements Map.Entry<K,V> {
+        final int hash;
+        final K key;
+        V value;
+        Node<K,V> next;
+        ......
+       }
+
+怎么初始化？
+V put(K key, V value)
+    public V put(K key, V value) {
+            return putVal(hash(key), key, value, false, true);
+        }
+    hash值，并不仅仅只是key对象的hashCode()方法的返回值，还会经过扰动函数的扰动，以使hash值更加均衡。
+    就是hash高16位保留，低16位与高16位异或。  异或作用：虽然值变了，但是保留了之前两个值的特性，再异或会恢复成原来的值。
+    hash值是一个int类型的数据 大小在-2147483648到2147483648 看结果就知道map是无法存放这么大角标的数据
+    hashmap最大MAXIMUM_CAPACITY = 1 << 30;为什么不是2的31次幂那么大呢？应该最大为为符号位
+    所有的hash值都与自身进行了异或并且自身异位
+    目的就在于你求余的时候包含了高16位和低16位的特性 也就是说你所计算出来的hash值包含从而使得你的hash值更加不确定 来降低碰撞的概率
+    static final int hash(Object key) {
+            int h;
+            return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+        }
+    Node<K,V>[] resize() 初始化方法
+    1.初次add,数组为null或者长度为0，if ((tab = table) == null || (n = tab.length) == 0)，resize()创建长度为16的的单链数组
+    2.再add,length<16*0.75,那么加个newNode
+    3.再add,length>=threshold,threshold和length都增加一倍
+    if ((p = tab[i = (n - 1) & hash]) == null)    通过低位位与与将hash值进行求余  据key的hash值寻找对应的哈希桶时，可以用位运算替代取余操作
+        而且实际测试发现(n - 1) & hash是从0开始的，体现了hash算法的厉害之处
+
+        hash相同，判断key是否相同且不同于null,if (p.hash == hash &&((k = p.key) == key || (key != null && key.equals(k))))
+        key相同则覆盖原来的value
+    key不同，判断是不是树节点 p instanceof TreeNode，就新建叶子节点
+        e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+    不属于二叉树，一直遍历看链的next节点，hash,key相同的链旧覆盖。next节点为null,就新建节点，如果链长度大于等于8，就新建树
+        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st  当链表长度达到8，会转化成红黑树，以提升它的查询、插入效率
+            treeifyBin(tab, hash);break;
+
+
+
+
