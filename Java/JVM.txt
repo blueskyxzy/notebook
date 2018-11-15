@@ -1,0 +1,20 @@
+java优点
+跨平台
+为什么跨平台？c,c++跨平台吗？
+    c,c++是编译器层面兼容不同系统的实现，不同操作系统代码有差别。
+    编译成class文件，屏蔽了硬件，操作系统细节。
+
+JRE JVM JDK
+JRE Java Runtime Environment 运行类库
+JRE包含JVM，类库，编译器，
+JDK Java Development Kit 软件开发包。
+没有JDK的话，无法编译Java程序（指java源码.java文件），如果想只运行Java程序（指class或jar或其它归档文件），要确保已安装相应的JRE。
+
+Java为什么霸占企业级开发多年？并且多年第一？
+    内存管理！！！
+    专注在业务上，简单易上手。
+
+如果出现内存溢出等问题？
+    需要学习JVM内存管理
+
+
