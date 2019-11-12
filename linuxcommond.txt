@@ -97,8 +97,8 @@ linux常用命令：
 
 springboot部署脚本
     ps -ef | grep org.springframework.boot.loader.JarLauncher | grep appname=admin | grep -v grep | cut -c 9-15 | xargs kill -s 9
-    rm /usr/local/sw/app/sw-admin/(jar包名).jar
-    cp （项目名)-1.0-SNAPSHOT.jar -i /usr/local/sw/app/（项目名)/(jar包名).jar
+    rm /项目目录下的jar包.jar
+    cp （项目名)-1.0-SNAPSHOT.jar -i /项目目录（项目名)/(jar包名).jar
     cd /项目目录（项目名)
     rm -rf org
     rm -rf BOOT-INF
